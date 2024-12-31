@@ -45,7 +45,7 @@ class ManageTicketEvent(commands.Cog):
                     interaction.user: nc.PermissionOverwrite(read_messages=True)
                 })
                 
-                await interaction.send("Ticket créé !", ephemeral=True)
+                await interaction.send("Le ticket a été créé ! <:yay:1274376322847739935>", ephemeral=True)
 
 
 def setup(bot):
