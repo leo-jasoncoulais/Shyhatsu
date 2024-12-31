@@ -19,4 +19,4 @@ for C in listdir("cogs"):
 
 bot.load_extensions(cogs)
 
-bot.run(getenv("TOKEN"))
+bot.run(getenv("TOKEN_RELEASE"))
