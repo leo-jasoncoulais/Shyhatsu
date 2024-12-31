@@ -4,7 +4,7 @@ from nextcord.ui import Button, View
 from json import load, dump
 from time import sleep
 
-class ManageTicketCommand(commands.Cog):
+class ManageTicket(commands.Cog):
 
     all_members = []
 
@@ -14,7 +14,7 @@ class ManageTicketCommand(commands.Cog):
         for c in config:
             self.__setattr__(c, config[c])
 
-        ManageTicketCommand.all_members = bot.get_all_members()
+        ManageTicket.all_members = bot.get_all_members()
 
     def update_config_file(self):
 
@@ -129,4 +129,4 @@ class ManageTicketCommand(commands.Cog):
 def setup(bot):
     with open("config.json", "r") as file:
         config = load(file)
-        bot.add_cog(ManageTicketCommand(bot, config))
+        bot.add_cog(ManageTicket(bot, config))
