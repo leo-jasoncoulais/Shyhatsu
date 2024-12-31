@@ -4,7 +4,7 @@ from nextcord.ui import Button, View
 from json import load, dump
 from time import sleep
 
-class ManageTicket(commands.Cog):
+class ManageTicketCommand(commands.Cog):
 
     all_members = []
 
@@ -14,7 +14,7 @@ class ManageTicket(commands.Cog):
         for c in config:
             self.__setattr__(c, config[c])
 
-        ManageTicket.all_members = bot.get_all_members()
+        ManageTicketCommand.all_members = bot.get_all_members()
 
     def update_config_file(self):
 
@@ -32,7 +32,7 @@ class ManageTicket(commands.Cog):
     @nc.slash_command(description="Accepter un membre sur le serveur.")
     async def accepter_membre(self, interaction: nc.Interaction, membre:nc.Member = nc.SlashOption(choices=all_members)):
 
-        guild = await self.bot.fetch_guild(self.GUILD_ID)
+        guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
         await guild.fetch_roles()
 
         if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == guild.owner_id):
@@ -95,7 +95,7 @@ class ManageTicket(commands.Cog):
 
                 await interaction.message.delete()
 
-        guild = await self.bot.fetch_guild(self.GUILD_ID)
+        guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
         await guild.fetch_roles()
 
         if not (interaction.user.top_role.permissions.manage_channels or interaction.user.top_role.permissions.administrator or interaction.user.id == guild.owner_id):
@@ -129,4 +129,4 @@ class ManageTicket(commands.Cog):
 def setup(bot):
     with open("config.json", "r") as file:
         config = load(file)
-        bot.add_cog(ManageTicket(bot, config))
+        bot.add_cog(ManageTicketCommand(bot, config))

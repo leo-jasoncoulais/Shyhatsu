@@ -13,9 +13,13 @@ async def on_ready():
 
 cogs = []
 
-for C in listdir("cogs"):
+for C in listdir("cogs/commands"):
     if C.endswith(".py"):
-        cogs.append("cogs."+C[:-3])
+        cogs.append("cogs.commands."+C[:-3])
+
+for C in listdir("cogs/events"):
+    if C.endswith(".py"):
+        cogs.append("cogs.events."+C[:-3])
 
 bot.load_extensions(cogs)
 
