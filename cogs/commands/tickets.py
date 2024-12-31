@@ -54,6 +54,29 @@ class ManageTicketCommand(commands.Cog):
             sleep(5)
 
             await interaction.channel.delete()
+    
+    @nc.slash_command(description="Refuser un membre sur le serveur.")
+    async def refuser_membre(self, interaction: nc.Interaction, membre:nc.Member = nc.SlashOption(choices=all_members)):
+
+        guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
+        await guild.fetch_roles()
+
+        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == guild.owner_id):
+            await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
+
+        elif interaction.channel.category.id != self.TICKET_CATEGORY_ID:
+            await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
+
+        else:
+
+            await interaction.send(f"Désolé <@{membre.id}>, tu ne réponds pas aux exigences du serveur... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+            await membre.send("Désolé, tu ne réponds pas aux exigences du serveur... Tu as donc été expulsé.\n-# Si tu n'avais pas l'âge légal, revient quand tu l'auras ^^")
+
+            await membre.kick()
+
+            sleep(5)
+
+            await interaction.channel.delete()
 
     @nc.slash_command(description="Mettre en place le système de tickets.")
     async def configurer_tickets(self, 
