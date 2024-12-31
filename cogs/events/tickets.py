@@ -40,6 +40,7 @@ class ManageTicketEvent(commands.Cog):
                 id = sum([int(i) for i in str(interaction.user.id)])
 
                 channel = await category.create_text_channel(name=f"ticket-{id}", overwrites={
+
                     guild.default_role: nc.PermissionOverwrite(read_messages=False),
                     guild.get_role(self.STAFF_ROLE_ID): nc.PermissionOverwrite(read_messages=True),
                     interaction.user: nc.PermissionOverwrite(read_messages=True)
