@@ -70,7 +70,11 @@ class ManageTicketCommand(commands.Cog):
         else:
 
             await interaction.send(f"Désolé <@{membre.id}>, tu ne réponds pas aux exigences du serveur... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
-            await membre.send("Désolé, tu ne réponds pas aux exigences du serveur... Tu as donc été expulsé.\n-# Si tu n'avais pas l'âge légal, revient quand tu l'auras ^^")
+
+            try:
+                await membre.send("Désolé, tu ne réponds pas aux exigences du serveur... Tu as donc été expulsé.\n-# Si tu n'avais pas l'âge légal, revient quand tu l'auras ^^")
+            except:
+                pass
 
             await membre.kick()
 
