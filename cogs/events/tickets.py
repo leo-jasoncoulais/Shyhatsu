@@ -4,15 +4,8 @@ from json import load, dump
 
 class ManageTicketEvent(commands.Cog):
 
-    all_members = []
-
-    def __init__(self, bot, config) -> None:
+    def __init__(self, bot) -> None:
         self.bot = bot
-        
-        for c in config:
-            self.__setattr__(c, config[c])
-
-        ManageTicketEvent.all_members = bot.get_all_members()
 
     def get_value(self, key):
 

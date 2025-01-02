@@ -4,11 +4,8 @@ from json import load, dump
 
 class SetupCommand(commands.Cog):
 
-    def __init__(self, bot, config) -> None:
+    def __init__(self, bot) -> None:
         self.bot = bot
-        
-        for c in config:
-            self.__setattr__(c, config[c])
 
 
     def get_value(self, key):
