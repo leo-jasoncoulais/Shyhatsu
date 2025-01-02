@@ -48,7 +48,7 @@ class ManageTicketEvent(commands.Cog):
                 await interaction.send("Le ticket a été créé ! <:yay:1274376322847739935>", ephemeral=True)
 
                 await channel.send(embed=embed)
-                msg = await channel.send(f"<@{interaction.user.id}><@&{self.get_value("STAFF_ROLE_ID")}>")
+                msg = await channel.send(f"<@{interaction.user.id}><@&{self.get_value('STAFF_ROLE_ID')}>")
                 await msg.delete()
 
 
