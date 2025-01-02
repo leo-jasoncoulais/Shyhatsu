@@ -11,14 +11,19 @@ class SetupCommand(commands.Cog):
             self.__setattr__(c, config[c])
 
 
-    def update_config_file(self):
+    def get_value(self, key):
+
+        with open("config.json", "r") as file:
+            config = load(file)
+            return config[key]
+
+    def write_value(self, key, value):
 
         config = {}
 
         with open("config.json", "r") as file:
             config = load(file)
-            for c in config:
-                config[c] = self.__getattribute__(c)
+            config[key] = value
 
         with open("config.json", "w") as file:
 
@@ -34,10 +39,8 @@ class SetupCommand(commands.Cog):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:
-            self.MEMBER_ROLE_ID = membre.id
-            self.STAFF_ROLE_ID = staff.id
-            
-            self.update_config_file()
+            self.write_value("MEMBER_ROLE_ID", membre.id)
+            self.write_value("STAFF_ROLE_ID", staff.id)
 
             await interaction.send(f"Les rôles sont configurés ! <:yay:1274376322847739935>", ephemeral=True)
 
