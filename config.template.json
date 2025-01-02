@@ -1,0 +1,7 @@
+{
+    "GUILD_ID": false,
+    "MEMBER_ROLE_ID": false,
+    "STAFF_ROLE_ID": false,
+    "TICKET_CHANNEL_ID": false,
+    "TICKET_CATEGORY_ID": false
+}
