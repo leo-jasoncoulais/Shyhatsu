@@ -42,7 +42,13 @@ class ManageTicketCommand(commands.Cog):
 
             role = interaction.guild.get_role(self.get_value("MEMBER_ROLE_ID"))
             
-            member = interaction.guild.get_member(int(interaction.channel.topic))
+            try:
+                member = await interaction.guild.fetch_member(int(interaction.channel.topic))
+            except:
+                await interaction.send("Désolé, je n'ai pas pu trouver le membre... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+                sleep(5)
+                await interaction.channel.delete()
+                return
 
             try:
                 await member.add_roles(role)
@@ -67,7 +73,14 @@ class ManageTicketCommand(commands.Cog):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
-            member = interaction.guild.get_member(int(interaction.channel.topic))
+
+            try:
+                member = await interaction.guild.fetch_member(int(interaction.channel.topic))
+            except:
+                await interaction.send("Désolé, je n'ai pas pu trouver le membre... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+                sleep(5)
+                await interaction.channel.delete()
+                return
 
             await interaction.send(f"Désolé <@{member.id}>, tu ne réponds pas aux exigences du serveur... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
 
