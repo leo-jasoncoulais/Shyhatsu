@@ -30,7 +30,7 @@ class ManageTicketCommand(commands.Cog):
             dump(config, file, indent=4)
 
     @nc.slash_command(description="Accepter un membre sur le serveur.")
-    async def accepter_membre(self, interaction: nc.Interaction, membre:nc.Member = nc.SlashOption(choices=all_members)):
+    async def accepter_membre(self, interaction: nc.Interaction):
 
         guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
         await guild.fetch_roles()
@@ -42,21 +42,27 @@ class ManageTicketCommand(commands.Cog):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
-            role = guild.get_role(self.MEMBER_ROLE_ID)
+            memberRole = guild.get_role(self.MEMBER_ROLE_ID)
+            staffRole = guild.get_role(self.STAFF_ROLE_ID)
+            
+            isStaff = list(map(lambda m: staffRole in m.roles, interaction.channel.members))
+            indexMember = isStaff.index(False)
+
+            member = interaction.channel.members[indexMember]
 
             try:
-                await membre.add_roles(role)
+                await member.add_roles(memberRole)
             except:
                 pass
 
-            await interaction.send(f"<@{membre.id}>, on te souhaite la bienvenue sur le serveur ! <:yay:1274376322847739935>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+            await interaction.send(f"<@{member.id}>, on te souhaite la bienvenue sur le serveur ! <:yay:1274376322847739935>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
 
             sleep(5)
 
             await interaction.channel.delete()
     
     @nc.slash_command(description="Refuser un membre sur le serveur.")
-    async def refuser_membre(self, interaction: nc.Interaction, membre:nc.Member = nc.SlashOption(choices=all_members)):
+    async def refuser_membre(self, interaction: nc.Interaction):
 
         guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
         await guild.fetch_roles()
@@ -68,15 +74,21 @@ class ManageTicketCommand(commands.Cog):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
+            staffRole = guild.get_role(self.STAFF_ROLE_ID)
+            
+            isStaff = list(map(lambda m: staffRole in m.roles, interaction.channel.members))
+            indexMember = isStaff.index(False)
 
-            await interaction.send(f"Désolé <@{membre.id}>, tu ne réponds pas aux exigences du serveur... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+            member = interaction.channel.members[indexMember]
+
+            await interaction.send(f"Désolé <@{member.id}>, tu ne réponds pas aux exigences du serveur... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
 
             try:
-                await membre.send("Désolé, tu ne réponds pas aux exigences du serveur... Tu as donc été expulsé.\n-# Si tu n'avais pas l'âge légal, revient quand tu l'auras ^^")
+                await member.send("Désolé, tu ne réponds pas aux exigences du serveur... Tu as donc été expulsé.\n-# Si tu n'avais pas l'âge requis, revient quand tu l'auras ^^")
             except:
                 pass
 
-            await membre.kick()
+            await member.kick()
 
             sleep(5)
 
