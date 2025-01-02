@@ -39,7 +39,7 @@ class SetupCommand(commands.Cog):
             
             self.update_config_file()
 
-            await interaction.send(f"Les rôles sont configurés ! <:yay:1274376322847739935>")
+            await interaction.send(f"Les rôles sont configurés ! <:yay:1274376322847739935>", ephemeral=True)
 
 def setup(bot):
     with open("config.json", "r") as file:
