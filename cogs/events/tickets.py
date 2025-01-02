@@ -34,15 +34,14 @@ class ManageTicketEvent(commands.Cog):
 
             if interaction.data["custom_id"] == "create_ticket":
 
-                guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
-                category: nc.CategoryChannel = await guild.fetch_channel(self.TICKET_CATEGORY_ID)
+                category: nc.CategoryChannel = await interaction.guild.fetch_channel(self.TICKET_CATEGORY_ID)
 
                 id = sum([int(i) for i in str(interaction.user.id)])
 
-                channel = await category.create_text_channel(name=f"ticket-{id}", overwrites={
+                channel = await category.create_text_channel(name=f"ticket-{id}", topic=str(interaction.user.id), overwrites={
 
-                    guild.default_role: nc.PermissionOverwrite(read_messages=False),
-                    guild.get_role(self.STAFF_ROLE_ID): nc.PermissionOverwrite(read_messages=True),
+                    interaction.guild.default_role: nc.PermissionOverwrite(read_messages=False),
+                    interaction.guild.get_role(self.STAFF_ROLE_ID): nc.PermissionOverwrite(read_messages=True),
                     interaction.user: nc.PermissionOverwrite(read_messages=True)
                 })
 
