@@ -83,7 +83,7 @@ class ManageTicketCommand(commands.Cog):
     @nc.slash_command(description="Mettre en place le système de tickets.")
     async def configurer_tickets(self, 
             interaction: nc.Interaction,
-            ticket_category: str = nc.SlashOption(description="La catégorie où les tickets seront créés.", required=True)
+            ticket_category: nc.CategoryChannel = nc.SlashOption(description="La catégorie où les tickets seront créés.", required=True)
         ):
 
         async def allow_ticket_creation(interaction: nc.Interaction):
@@ -91,7 +91,7 @@ class ManageTicketCommand(commands.Cog):
             if interaction.data["custom_id"] == "delete_ticket":
 
                 self.TICKET_CHANNEL_ID = interaction.channel.id
-                self.TICKET_CATEGORY_ID = int(ticket_category)
+                self.TICKET_CATEGORY_ID = ticket_category.id
 
                 self.update_config_file()
 
@@ -140,7 +140,7 @@ class ManageTicketCommand(commands.Cog):
             else:
 
                 self.TICKET_CHANNEL_ID = interaction.channel.id
-                self.TICKET_CATEGORY_ID = int(ticket_category)
+                self.TICKET_CATEGORY_ID = ticket_category.id
 
                 self.update_config_file()
 
