@@ -160,6 +160,4 @@ class ManageTicketCommand(commands.Cog):
                 await interaction.delete_original_message()
 
 def setup(bot):
-    with open("config.json", "r") as file:
-        config = load(file)
-        bot.add_cog(ManageTicketCommand(bot, config))
+    bot.add_cog(ManageTicketCommand(bot))

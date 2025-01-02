@@ -60,6 +60,4 @@ class ManageTicketEvent(commands.Cog):
 
 
 def setup(bot):
-    with open("config.json", "r") as file:
-        config = load(file)
-        bot.add_cog(ManageTicketEvent(bot, config))
+    bot.add_cog(ManageTicketEvent(bot))
