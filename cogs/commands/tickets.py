@@ -6,15 +6,11 @@ from time import sleep
 
 class ManageTicketCommand(commands.Cog):
 
-    all_members = []
-
     def __init__(self, bot, config) -> None:
         self.bot = bot
         
         for c in config:
             self.__setattr__(c, config[c])
-
-        ManageTicketCommand.all_members = bot.get_all_members()
 
     def update_config_file(self):
 
@@ -32,26 +28,22 @@ class ManageTicketCommand(commands.Cog):
     @nc.slash_command(description="Accepter un membre sur le serveur.")
     async def accepter_membre(self, interaction: nc.Interaction):
 
-        guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
-        await guild.fetch_roles()
+        await interaction.guild.fetch_roles()
 
-        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == guild.owner_id):
+        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         elif interaction.channel.category.id != self.TICKET_CATEGORY_ID:
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
-            memberRole = guild.get_role(self.MEMBER_ROLE_ID)
-            staffRole = guild.get_role(self.STAFF_ROLE_ID)
-            
-            isStaff = list(map(lambda m: staffRole in m.roles, interaction.channel.members))
-            indexMember = isStaff.index(False)
 
-            member = interaction.channel.members[indexMember]
+            role = interaction.guild.get_role(self.MEMBER_ROLE_ID)
+            
+            member = interaction.guild.get_member(int(interaction.channel.topic))
 
             try:
-                await member.add_roles(memberRole)
+                await member.add_roles(role)
             except:
                 pass
 
@@ -64,22 +56,16 @@ class ManageTicketCommand(commands.Cog):
     @nc.slash_command(description="Refuser un membre sur le serveur.")
     async def refuser_membre(self, interaction: nc.Interaction):
 
-        guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
-        await guild.fetch_roles()
+        await interaction.guild.fetch_roles()
 
-        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == guild.owner_id):
+        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         elif interaction.channel.category.id != self.TICKET_CATEGORY_ID:
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
-            staffRole = guild.get_role(self.STAFF_ROLE_ID)
-            
-            isStaff = list(map(lambda m: staffRole in m.roles, interaction.channel.members))
-            indexMember = isStaff.index(False)
-
-            member = interaction.channel.members[indexMember]
+            member = interaction.guild.get_member(int(interaction.channel.topic))
 
             await interaction.send(f"Désolé <@{member.id}>, tu ne réponds pas aux exigences du serveur... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
 
@@ -134,10 +120,9 @@ class ManageTicketCommand(commands.Cog):
 
                 await interaction.message.delete()
 
-        guild: nc.Guild = await self.bot.fetch_guild(self.GUILD_ID)
-        await guild.fetch_roles()
+        await interaction.guild.fetch_roles()
 
-        if not (interaction.user.top_role.permissions.manage_channels or interaction.user.top_role.permissions.administrator or interaction.user.id == guild.owner_id):
+        if not (interaction.user.top_role.permissions.manage_channels or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:
@@ -159,11 +144,22 @@ class ManageTicketCommand(commands.Cog):
 
                 self.update_config_file()
 
-                await interaction.send("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>", view=None)
+                await interaction.send("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>")
+
+                view = View()
+                view.add_item(Button(style=nc.ButtonStyle.primary, label="Créer un ticket", custom_id="create_ticket"))
+                
+                embed = nc.Embed(
+                    title="Ticket d'entrée <:petitefrog:1216663533928845322>",
+                    description="Pour rentrer sur le serveur, merci d'ouvrir un ticket et répondre aux questions ! <:yay:1274376322847739935>",
+                    color=nc.Color.green()
+                )
+
+                await interaction.channel.send(embed=embed, view=view)
 
                 sleep(3)    
 
-                await interaction.message.delete()
+                await interaction.delete_original_message()
 
 def setup(bot):
     with open("config.json", "r") as file:
