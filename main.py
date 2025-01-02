@@ -23,4 +23,4 @@ for C in listdir("cogs/events"):
 
 bot.load_extensions(cogs)
 
-bot.run(getenv("TOKEN_DEBUG"))
+bot.run(getenv("TOKEN"))
