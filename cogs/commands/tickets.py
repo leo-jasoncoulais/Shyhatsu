@@ -6,20 +6,22 @@ from time import sleep
 
 class ManageTicketCommand(commands.Cog):
 
-    def __init__(self, bot, config) -> None:
+    def __init__(self, bot) -> None:
         self.bot = bot
-        
-        for c in config:
-            self.__setattr__(c, config[c])
 
-    def update_config_file(self):
+    def get_value(self, key):
+
+        with open("config.json", "r") as file:
+            config = load(file)
+            return config[key]
+
+    def write_value(self, key, value):
 
         config = {}
 
         with open("config.json", "r") as file:
             config = load(file)
-            for c in config:
-                config[c] = self.__getattribute__(c)
+            config[key] = value
 
         with open("config.json", "w") as file:
 
@@ -33,12 +35,12 @@ class ManageTicketCommand(commands.Cog):
         if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
-        elif interaction.channel.category.id != self.TICKET_CATEGORY_ID:
+        elif interaction.channel.category.id != self.get_value("TICKET_CATEGORY_ID"):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
 
-            role = interaction.guild.get_role(self.MEMBER_ROLE_ID)
+            role = interaction.guild.get_role(self.get_value("MEMBER_ROLE_ID"))
             
             member = interaction.guild.get_member(int(interaction.channel.topic))
 
@@ -61,7 +63,7 @@ class ManageTicketCommand(commands.Cog):
         if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
-        elif interaction.channel.category.id != self.TICKET_CATEGORY_ID:
+        elif interaction.channel.category.id != self.get_value("TICKET_CATEGORY_ID"):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
@@ -83,17 +85,15 @@ class ManageTicketCommand(commands.Cog):
     @nc.slash_command(description="Mettre en place le système de tickets.")
     async def configurer_tickets(self, 
             interaction: nc.Interaction,
-            ticket_category: str = nc.SlashOption(description="La catégorie où les tickets seront créés.", required=True)
+            ticket_category: nc.CategoryChannel = nc.SlashOption(description="La catégorie où les tickets seront créés.", required=True)
         ):
 
         async def allow_ticket_creation(interaction: nc.Interaction):
             
             if interaction.data["custom_id"] == "delete_ticket":
 
-                self.TICKET_CHANNEL_ID = interaction.channel.id
-                self.TICKET_CATEGORY_ID = int(ticket_category)
-
-                self.update_config_file()
+                self.write_value("TICKET_CHANNEL_ID", interaction.channel.id)
+                self.write_value("TICKET_CATEGORY_ID", ticket_category.id)
 
                 await interaction.message.edit("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>", view=None)
 
@@ -127,7 +127,7 @@ class ManageTicketCommand(commands.Cog):
 
         else:
 
-            if self.TICKET_CHANNEL_ID:
+            if self.get_value("TICKET_CHANNEL_ID"):
 
                 view = View()
                 view.add_item(Button(style=nc.ButtonStyle.danger, label="Supprimer l'ancien système de tickets", custom_id="delete_ticket"))
@@ -139,10 +139,8 @@ class ManageTicketCommand(commands.Cog):
 
             else:
 
-                self.TICKET_CHANNEL_ID = interaction.channel.id
-                self.TICKET_CATEGORY_ID = int(ticket_category)
-
-                self.update_config_file()
+                self.write_value("TICKET_CHANNEL_ID", interaction.channel.id)
+                self.write_value("TICKET_CATEGORY_ID", ticket_category.id)
 
                 await interaction.send("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>")
 
