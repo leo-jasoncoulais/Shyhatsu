@@ -95,8 +95,6 @@ class ManageTicketCommand(commands.Cog):
                 self.write_value("TICKET_CHANNEL_ID", interaction.channel.id)
                 self.write_value("TICKET_CATEGORY_ID", ticket_category.id)
 
-                self.update_config_file()
-
                 await interaction.message.edit("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>", view=None)
 
                 view = View()
@@ -143,8 +141,6 @@ class ManageTicketCommand(commands.Cog):
 
                 self.write_value("TICKET_CHANNEL_ID", interaction.channel.id)
                 self.write_value("TICKET_CATEGORY_ID", ticket_category.id)
-
-                self.update_config_file()
 
                 await interaction.send("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>")
 
