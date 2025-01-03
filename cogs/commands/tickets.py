@@ -1,31 +1,13 @@
 import nextcord as nc
 from nextcord.ext import commands
 from nextcord.ui import Button, View
-from json import load, dump
 from time import sleep
+from utils import get_value, set_value
 
 class ManageTicketCommand(commands.Cog):
 
     def __init__(self, bot) -> None:
         self.bot = bot
-
-    def get_value(self, key):
-
-        with open("config.json", "r") as file:
-            config = load(file)
-            return config[key]
-
-    def write_value(self, key, value):
-
-        config = {}
-
-        with open("config.json", "r") as file:
-            config = load(file)
-            config[key] = value
-
-        with open("config.json", "w") as file:
-
-            dump(config, file, indent=4)
 
     @nc.slash_command(description="Accepter un membre sur le serveur.")
     async def accepter_membre(self, interaction: nc.Interaction):
@@ -35,12 +17,12 @@ class ManageTicketCommand(commands.Cog):
         if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
-        elif interaction.channel.category.id != self.get_value("TICKET_CATEGORY_ID"):
+        elif interaction.channel.category.id != get_value("TICKET_CATEGORY_ID"):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
 
-            role = interaction.guild.get_role(self.get_value("MEMBER_ROLE_ID"))
+            role = interaction.guild.get_role(get_value("MEMBER_ROLE_ID"))
             
             try:
                 member = await interaction.guild.fetch_member(int(interaction.channel.topic))
@@ -69,7 +51,7 @@ class ManageTicketCommand(commands.Cog):
         if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
-        elif interaction.channel.category.id != self.get_value("TICKET_CATEGORY_ID"):
+        elif interaction.channel.category.id != get_value("TICKET_CATEGORY_ID"):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
@@ -105,8 +87,8 @@ class ManageTicketCommand(commands.Cog):
             
             if interaction.data["custom_id"] == "delete_ticket":
 
-                self.write_value("TICKET_CHANNEL_ID", interaction.channel.id)
-                self.write_value("TICKET_CATEGORY_ID", ticket_category.id)
+                set_value("TICKET_CHANNEL_ID", interaction.channel.id)
+                set_value("TICKET_CATEGORY_ID", ticket_category.id)
 
                 await interaction.message.edit("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>", view=None)
 
@@ -140,7 +122,7 @@ class ManageTicketCommand(commands.Cog):
 
         else:
 
-            if self.get_value("TICKET_CHANNEL_ID"):
+            if get_value("TICKET_CHANNEL_ID"):
 
                 view = View()
                 view.add_item(Button(style=nc.ButtonStyle.danger, label="Supprimer l'ancien système de tickets", custom_id="delete_ticket"))
@@ -152,8 +134,8 @@ class ManageTicketCommand(commands.Cog):
 
             else:
 
-                self.write_value("TICKET_CHANNEL_ID", interaction.channel.id)
-                self.write_value("TICKET_CATEGORY_ID", ticket_category.id)
+                set_value("TICKET_CHANNEL_ID", interaction.channel.id)
+                set_value("TICKET_CATEGORY_ID", ticket_category.id)
 
                 await interaction.send("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>")
 
