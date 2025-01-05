@@ -37,11 +37,14 @@ class ManageTicketCommand(commands.Cog):
             except:
                 pass
 
-            await interaction.send(f"<@{member.id}>, on te souhaite la bienvenue sur le serveur ! <:yay:1274376322847739935>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+            await interaction.send(f"{member.display_name}, on te souhaite la bienvenue sur le serveur ! <:yay:1274376322847739935>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
 
             sleep(5)
 
             await interaction.channel.delete()
+
+            chat = await interaction.guild.fetch_channel(get_value("CHAT_CHANNEL_ID"))
+            await chat.send(f"{member.mention} a rejoint le serveur !\nSouhaitez lui la bienvenue ! <:yay:1274376322847739935>")
     
     @nc.slash_command(description="Refuser un membre sur le serveur.")
     async def refuser_membre(self, interaction: nc.Interaction):
@@ -60,11 +63,13 @@ class ManageTicketCommand(commands.Cog):
                 member = await interaction.guild.fetch_member(int(interaction.channel.topic))
             except:
                 await interaction.send("Désolé, je n'ai pas pu trouver le membre... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+
                 sleep(5)
+                
                 await interaction.channel.delete()
                 return
 
-            await interaction.send(f"Désolé <@{member.id}>, tu ne réponds pas aux exigences du serveur... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+            await interaction.send(f"Désolé {member.display_name}, tu ne réponds pas aux exigences du serveur... <:tristefrog:1274343966623400017>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
 
             try:
                 await member.send("Désolé, tu ne réponds pas aux exigences du serveur... Tu as donc été expulsé.\n-# Si tu n'avais pas l'âge requis, revient quand tu l'auras ^^")
@@ -80,7 +85,8 @@ class ManageTicketCommand(commands.Cog):
     @nc.slash_command(description="Mettre en place le système de tickets.")
     async def configurer_tickets(self, 
             interaction: nc.Interaction,
-            ticket_category: nc.CategoryChannel = nc.SlashOption(description="La catégorie où les tickets seront créés.", required=True)
+            ticket_category: nc.CategoryChannel = nc.SlashOption(description="La catégorie où les tickets seront créés.", required=True),
+            chat_channel: nc.TextChannel = nc.SlashOption(description="Le chat de discussion générale.", required=True)
         ):
 
         async def allow_ticket_creation(interaction: nc.Interaction):
@@ -136,6 +142,7 @@ class ManageTicketCommand(commands.Cog):
 
                 set_value("TICKET_CHANNEL_ID", interaction.channel.id)
                 set_value("TICKET_CATEGORY_ID", ticket_category.id)
+                set_value("CHAT_CHANNEL_ID", chat_channel.id)
 
                 await interaction.send("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>")
 
