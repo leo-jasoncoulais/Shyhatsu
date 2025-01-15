@@ -45,7 +45,7 @@ class ManageTicketCommand(commands.Cog):
 
             await interaction.channel.delete()
 
-            chat = await interaction.guild.fetch_channel(get_value("CHAT_CHANNEL_ID"))
+            chat = await interaction.guild.fetch_channel(config.get_value("CHAT_CHANNEL_ID"))
             await chat.send(f"{member.mention} a rejoint le serveur !\nSouhaitez lui la bienvenue ! <:yay:1274376322847739935>")
     
     @nc.slash_command(description="Refuser un membre sur le serveur.")
@@ -142,9 +142,9 @@ class ManageTicketCommand(commands.Cog):
 
             else:
 
-                set_value("TICKET_CHANNEL_ID", interaction.channel.id)
-                set_value("TICKET_CATEGORY_ID", ticket_category.id)
-                set_value("CHAT_CHANNEL_ID", chat_channel.id)
+                config.set_value("TICKET_CHANNEL_ID", interaction.channel.id)
+                config.set_value("TICKET_CATEGORY_ID", ticket_category.id)
+                config.set_value("CHAT_CHANNEL_ID", chat_channel.id)
 
                 await interaction.send("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>")
 
