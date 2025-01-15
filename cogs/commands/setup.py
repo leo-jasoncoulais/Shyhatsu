@@ -1,30 +1,13 @@
 import nextcord as nc
 from nextcord.ext import commands
-from json import load, dump
+from utils import Config
+
+config = Config()
 
 class SetupCommand(commands.Cog):
 
     def __init__(self, bot) -> None:
         self.bot = bot
-
-
-    def get_value(self, key):
-
-        with open("config.json", "r") as file:
-            config = load(file)
-            return config[key]
-
-    def write_value(self, key, value):
-
-        config = {}
-
-        with open("config.json", "r") as file:
-            config = load(file)
-            config[key] = value
-
-        with open("config.json", "w") as file:
-
-            dump(config, file, indent=4)
 
     @nc.slash_command(description="Configurer rôles.")
     async def setup(self, interaction: nc.Interaction,
@@ -36,8 +19,8 @@ class SetupCommand(commands.Cog):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:
-            self.write_value("MEMBER_ROLE_ID", membre.id)
-            self.write_value("STAFF_ROLE_ID", staff.id)
+            config.get_value("MEMBER_ROLE_ID", membre.id)
+            config.get_value("STAFF_ROLE_ID", staff.id)
 
             await interaction.send(f"Les rôles sont configurés ! <:yay:1274376322847739935>", ephemeral=True)
 
