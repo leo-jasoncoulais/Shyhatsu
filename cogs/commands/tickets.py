@@ -40,6 +40,9 @@ class ManageTicketCommand(commands.Cog):
                 pass
 
             await interaction.send(f"{member.display_name}, on te souhaite la bienvenue sur le serveur ! <:yay:1274376322847739935>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
+            
+            general = await interaction.guild.fetch_channel(config.get_value("GENERAL_CHANNEL_ID"))
+            await general.send(f"<@{member.id}> a rejoint le serveur !\nSouhaitez lui la bienvenue ! <:yay:127437632284773993>")
 
             sleep(5)
 
