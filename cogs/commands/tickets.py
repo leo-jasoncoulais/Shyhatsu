@@ -39,6 +39,9 @@ class ManageTicketCommand(commands.Cog):
 
             await interaction.send(f"<@{member.id}>, on te souhaite la bienvenue sur le serveur ! <:yay:1274376322847739935>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
 
+            general_chat = await interaction.guild.fetch_channel(get_value("GENERAL_CHAT_ID"))
+            await general_chat.send(f"<@{member.id}> a rejoint le serveur ! <:yay:1274376322847739935>On lui souhaite la bienvenue !")
+
             sleep(5)
 
             await interaction.channel.delete()
