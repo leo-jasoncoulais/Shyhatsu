@@ -27,7 +27,16 @@ class ManageTicketEvent(commands.Cog):
                     interaction.user: nc.PermissionOverwrite(read_messages=True)
                 })
 
-                embed = nc.Embed(title="Bienvenue à 𝐿'𝛼𝜋𝜏𝜄𝑞𝜇𝜀 ! ☕", description=f"Merci de répondre aux questions suivantes afin de valider ton arrivée sur le serveur! Un membre du staff te répondra dès que possible. 🐸\n\n🍉 Quel âge as-tu ?\n🍉 Que cherches-tu sur ce serveur?", color=nc.Color.green())
+                embed = nc.Embed(
+                    title="Bienvenue à 𝐿'𝛼𝜋𝜏𝜄𝑞𝜇𝜀 ! ☕", 
+                    description=(
+                        "Merci de répondre aux questions suivantes afin de valider ton arrivée sur le serveur ! Un membre du staff te répondra dès que possible. 🐸\n\n"
+                        "🍉 Quel âge as-tu ?\n"
+                        "🍉 Que cherches-tu sur ce serveur ?\n\n"
+                        "N'oublie pas que tu t'adresses à un être humain, la politesse n'est pas interdite !"
+                    ),
+                    color=nc.Color.green()
+                )
                 
                 await interaction.send("Le ticket a été créé ! <:yay:1274376322847739935>", ephemeral=True)
 

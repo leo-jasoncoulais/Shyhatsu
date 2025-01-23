@@ -42,14 +42,11 @@ class ManageTicketCommand(commands.Cog):
             await interaction.send(f"{member.display_name}, on te souhaite la bienvenue sur le serveur ! <:yay:1274376322847739935>\n-# Ce ticket sera supprimé dans 5 secondes ^^")
             
             general = await interaction.guild.fetch_channel(config.get_value("GENERAL_CHANNEL_ID"))
-            await general.send(f"<@{member.id}> a rejoint le serveur !\nSouhaitez lui la bienvenue ! <:yay:127437632284773993>")
+            await general.send(f"<@{member.id}> a rejoint le serveur !\nSouhaitez lui la bienvenue ! <:yay:1274376322847739935>")
 
             sleep(5)
 
             await interaction.channel.delete()
-
-            chat = await interaction.guild.fetch_channel(config.get_value("CHAT_CHANNEL_ID"))
-            await chat.send(f"{member.mention} a rejoint le serveur !\nSouhaitez lui la bienvenue ! <:yay:1274376322847739935>")
     
     @nc.slash_command(description="Refuser un membre sur le serveur.")
     async def refuser_membre(self, interaction: nc.Interaction):
