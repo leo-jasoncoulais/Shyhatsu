@@ -28,7 +28,7 @@ class ManageTicketEvent(commands.Cog):
                 })
 
                 embed = nc.Embed(
-                    title="Bienvenue à 𝐿'𝛼𝜋𝜏𝜄𝑞𝜇𝜀 ! ☕", 
+                    title="Bonjour, bienvenue à 𝐿'𝛼𝜋𝜏𝜄𝑞𝜇𝜀 ! ☕", 
                     description=(
                         "Merci de répondre aux questions suivantes afin de valider ton arrivée sur le serveur ! Un membre du staff te répondra dès que possible. 🐸\n\n"
                         "🍉 Quel âge as-tu ?\n"
