@@ -107,7 +107,7 @@ class ManageTicketCommand(commands.Cog):
     async def configurer_admission(self, 
             interaction: nc.Interaction,
             ticket_category: nc.CategoryChannel = nc.SlashOption(description="La catégorie où les tickets d'admission seront créés.", required=True),
-            chat_channel: nc.TextChannel = nc.SlashOption(description="Le chat de discussion générale.", required=True)
+            general_channel: nc.TextChannel = nc.SlashOption(description="Le chat de discussion générale.", required=True)
         ):
 
         async def allow_ticket_creation(interaction: nc.Interaction):
@@ -163,7 +163,7 @@ class ManageTicketCommand(commands.Cog):
 
                 config.set_value("TICKET_ADMISSION_CHANNEL_ID", interaction.channel.id)
                 config.set_value("TICKET_ADMISSION_CATEGORY_ID", ticket_category.id)
-                config.set_value("CHAT_CHANNEL_ID", chat_channel.id)
+                config.set_value("GENERAL_CHANNEL_ID", general_channel.id)
 
                 await interaction.send("Le système d'admission a été superbement configuré ! <:yay:1274376322847739935>")
 
