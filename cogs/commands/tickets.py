@@ -19,7 +19,7 @@ class ManageTicketCommand(commands.Cog):
         if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
-        elif interaction.channel.category.id != config.get_value("TICKET_CATEGORY_ID"):
+        elif not (interaction.channel.category.id == config.get_value("TICKET_ADMISSION_CATEGORY_ID") and interaction.channel.topic):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
@@ -56,7 +56,7 @@ class ManageTicketCommand(commands.Cog):
         if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
-        elif interaction.channel.category.id != config.get_value("TICKET_CATEGORY_ID"):
+        elif not (interaction.channel.category.id == config.get_value("TICKET_ADMISSION_CATEGORY_ID") and interaction.channel.topic):
             await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
 
         else:
@@ -84,24 +84,43 @@ class ManageTicketCommand(commands.Cog):
 
             await interaction.channel.delete()
 
-    @nc.slash_command(description="Mettre en place le système de tickets.")
-    async def configurer_tickets(self, 
+    @nc.slash_command(description="Fermer un ticket d'aide.")
+    async def fermer_ticket(self, interaction: nc.Interaction):
+
+        await interaction.guild.fetch_roles()
+
+        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+            await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
+
+        elif not (interaction.channel.category.id == config.get_value("TICKET_HELP_CATEGORY_ID") and not interaction.channel.topic):
+            await interaction.send("Désolé, tu n'as pas le droit de faire cette commande ici... <:tristefrog:1274343966623400017>")
+
+        else:
+
+            await interaction.send(f"Ce ticket sera supprimé dans 5 secondes ^^")
+
+            sleep(5)
+
+            await interaction.channel.delete()
+
+    @nc.slash_command(description="Mettre en place le système d'admission.")
+    async def configurer_admission(self, 
             interaction: nc.Interaction,
-            ticket_category: nc.CategoryChannel = nc.SlashOption(description="La catégorie où les tickets seront créés.", required=True),
+            ticket_category: nc.CategoryChannel = nc.SlashOption(description="La catégorie où les tickets d'admission seront créés.", required=True),
             chat_channel: nc.TextChannel = nc.SlashOption(description="Le chat de discussion générale.", required=True)
         ):
 
         async def allow_ticket_creation(interaction: nc.Interaction):
             
-            if interaction.data["custom_id"] == "delete_ticket":
+            if interaction.data["custom_id"] == "delete_ticket_admission":
 
-                config.set_value("TICKET_CHANNEL_ID", interaction.channel.id)
-                config.set_value("TICKET_CATEGORY_ID", ticket_category.id)
+                config.set_value("TICKET_ADMISSION_CHANNEL_ID", interaction.channel.id)
+                config.set_value("TICKET_ADMISSION_CATEGORY_ID", ticket_category.id)
 
-                await interaction.message.edit("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>", view=None)
+                await interaction.message.edit("Le système d'admission a été superbement configuré ! <:yay:1274376322847739935>", view=None)
 
                 view = View()
-                view.add_item(Button(style=nc.ButtonStyle.primary, label="Créer un ticket", custom_id="create_ticket"))
+                view.add_item(Button(style=nc.ButtonStyle.primary, label="Créer un ticket", custom_id="create_ticket_admission"))
                 
                 embed = nc.Embed(
                     title="Ticket d'entrée <:petitefrog:1216663533928845322>",
@@ -130,26 +149,103 @@ class ManageTicketCommand(commands.Cog):
 
         else:
 
-            if config.get_value("TICKET_CHANNEL_ID"):
+            if config.get_value("TICKET_ADMISSION_CHANNEL_ID"):
 
                 view = View()
-                view.add_item(Button(style=nc.ButtonStyle.danger, label="Supprimer l'ancien système de tickets", custom_id="delete_ticket"))
+                view.add_item(Button(style=nc.ButtonStyle.danger, label="Supprimer l'ancien système d'admission", custom_id="delete_ticket_admission"))
                 view.add_item(Button(style=nc.ButtonStyle.primary, label="Annuler", custom_id="cancel"))
 
                 view.interaction_check = allow_ticket_creation
 
-                await interaction.send("Il y a déjà un système de tickets, tu veux vraiment le supprimer pour en créer un nouveau ? <:OHHHH:1287740128806309930>", view=view)
+                await interaction.send("Il y a déjà un système d'admission, tu veux vraiment le supprimer pour en créer un nouveau ? <:OHHHH:1287740128806309930>", view=view)
 
             else:
 
-                config.set_value("TICKET_CHANNEL_ID", interaction.channel.id)
-                config.set_value("TICKET_CATEGORY_ID", ticket_category.id)
+                config.set_value("TICKET_ADMISSION_CHANNEL_ID", interaction.channel.id)
+                config.set_value("TICKET_ADMISSION_CATEGORY_ID", ticket_category.id)
                 config.set_value("CHAT_CHANNEL_ID", chat_channel.id)
 
-                await interaction.send("Le système de tickets a été superbement configuré ! <:yay:1274376322847739935>")
+                await interaction.send("Le système d'admission a été superbement configuré ! <:yay:1274376322847739935>")
 
                 view = View()
-                view.add_item(Button(style=nc.ButtonStyle.primary, label="Créer un ticket", custom_id="create_ticket"))
+                view.add_item(Button(style=nc.ButtonStyle.primary, label="Créer un ticket", custom_id="create_ticket_admission"))
+                
+                embed = nc.Embed(
+                    title="Ticket d'entrée <:petitefrog:1216663533928845322>",
+                    description="Pour rentrer sur le serveur, merci d'ouvrir un ticket et répondre aux questions ! <:yay:1274376322847739935>",
+                    color=nc.Color.green()
+                )
+
+                await interaction.channel.send(embed=embed, view=view)
+
+                sleep(3)    
+
+                await interaction.delete_original_message()
+
+    @nc.slash_command(description="Mettre en place le système de tickets d'aide.")
+    async def configurer_tickets(self, 
+            interaction: nc.Interaction,
+            ticket_category: nc.CategoryChannel = nc.SlashOption(description="La catégorie où les tickets d'aide seront créés.", required=True)
+        ):
+
+        async def allow_ticket_creation(interaction: nc.Interaction):
+            
+            if interaction.data["custom_id"] == "delete_ticket_help":
+
+                config.set_value("TICKET_HELP_CHANNEL_ID", interaction.channel.id)
+                config.set_value("TICKET_HELP_CATEGORY_ID", ticket_category.id)
+
+                await interaction.message.edit("Le système de tickets d'aide a été superbement configuré ! <:yay:1274376322847739935>", view=None)
+
+                view = View()
+                view.add_item(Button(style=nc.ButtonStyle.primary, label="Créer un ticket", custom_id="create_ticket_help"))
+                
+                embed = nc.Embed(
+                    title="Ticket d'aide <:petitefrog:1216663533928845322>",
+                    description="Pour toute demande auprès du staff ! <:yay:1274376322847739935>\n(signalement d'un bug, problème, réclamation, plainte...)",
+                    color=nc.Color.green()
+                )
+
+                await interaction.channel.send(embed=embed, view=view)
+                
+                sleep(3)
+
+                await interaction.message.delete()
+
+            else:
+
+                await interaction.message.edit("On fera la configuration plus tard. <:miamchoco:1216663553722023966>", view=None)
+
+                sleep(3)
+
+                await interaction.message.delete()
+
+        await interaction.guild.fetch_roles()
+
+        if not (interaction.user.top_role.permissions.manage_channels or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+            await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
+
+        else:
+
+            if config.get_value("TICKET_HELP_CHANNEL_ID"):
+
+                view = View()
+                view.add_item(Button(style=nc.ButtonStyle.danger, label="Supprimer l'ancien système de tickets d'aide", custom_id="delete_ticket_help"))
+                view.add_item(Button(style=nc.ButtonStyle.primary, label="Annuler", custom_id="cancel"))
+
+                view.interaction_check = allow_ticket_creation
+
+                await interaction.send("Il y a déjà un système de tickets d'aide, tu veux vraiment le supprimer pour en créer un nouveau ? <:OHHHH:1287740128806309930>", view=view)
+
+            else:
+
+                config.set_value("TICKET_HELP_CHANNEL_ID", interaction.channel.id)
+                config.set_value("TICKET_HELP_CATEGORY_ID", ticket_category.id)
+
+                await interaction.send("Le système de tickets d'aide a été superbement configuré ! <:yay:1274376322847739935>")
+
+                view = View()
+                view.add_item(Button(style=nc.ButtonStyle.primary, label="Créer un ticket", custom_id="create_ticket_help"))
                 
                 embed = nc.Embed(
                     title="Ticket d'entrée <:petitefrog:1216663533928845322>",

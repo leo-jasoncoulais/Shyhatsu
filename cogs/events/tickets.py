@@ -14,9 +14,9 @@ class ManageTicketEvent(commands.Cog):
         
         if interaction.type == nc.InteractionType.component:
 
-            if interaction.data["custom_id"] == "create_ticket":
+            if interaction.data["custom_id"] == "create_ticket_admission":
 
-                category: nc.CategoryChannel = await interaction.guild.fetch_channel(config.get_value("TICKET_CATEGORY_ID"))
+                category: nc.CategoryChannel = await interaction.guild.fetch_channel(config.get_value("TICKET_ADMISSION_CATEGORY_ID"))
 
                 id = sum([int(i) for i in str(interaction.user.id)])
 
@@ -33,6 +33,34 @@ class ManageTicketEvent(commands.Cog):
                         "Merci de répondre aux questions suivantes afin de valider ton arrivée sur le serveur ! Un membre du staff te répondra dès que possible. 🐸\n\n"
                         "🍉 Quel âge as-tu ?\n"
                         "🍉 Que cherches-tu sur ce serveur ?\n\n"
+                        "N'oublie pas que tu t'adresses à un être humain, la politesse n'est pas interdite !"
+                    ),
+                    color=nc.Color.green()
+                )
+                
+                await interaction.send("Le ticket a été créé ! <:yay:1274376322847739935>", ephemeral=True)
+
+                await channel.send(embed=embed)
+                msg = await channel.send(f"<@{interaction.user.id}><@&{config.get_value('STAFF_ROLE_ID')}>")
+                await msg.delete()
+
+            elif interaction.data["custom_id"] == "create_ticket_help":
+
+                category: nc.CategoryChannel = await interaction.guild.fetch_channel(config.get_value("TICKET_HELP_CATEGORY_ID"))
+
+                id = sum([int(i) for i in str(interaction.user.id)])
+
+                channel = await category.create_text_channel(name=f"ticket-{id}", overwrites={
+
+                    interaction.guild.default_role: nc.PermissionOverwrite(read_messages=False),
+                    interaction.guild.get_role(config.get_value("STAFF_ROLE_ID")): nc.PermissionOverwrite(read_messages=True),
+                    interaction.user: nc.PermissionOverwrite(read_messages=True)
+                })
+
+                embed = nc.Embed(
+                    title="Bonjour, ce ticket d'aide est fait **pour toi** ! ☕", 
+                    description=(
+                        "Merci de développer ton souci ou ta demande !\n\n"
                         "N'oublie pas que tu t'adresses à un être humain, la politesse n'est pas interdite !"
                     ),
                     color=nc.Color.green()

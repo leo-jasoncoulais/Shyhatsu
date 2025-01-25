@@ -14,7 +14,7 @@ class Config:
         return self.get_config()[key]
         
     def set_value(self, key, value):
+        config = self.get_config()
         with open(self.file, "w") as file:
-            config = self.get_config()
             config[key] = value
             dump(config, file, indent=4)
