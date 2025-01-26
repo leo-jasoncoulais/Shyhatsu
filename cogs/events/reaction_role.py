@@ -16,8 +16,8 @@ class ReactionRoleEvent(commands.Cog):
         if message_reactions:
             if str(reaction.emoji.name) in message_reactions:
                 role_id = message_reactions[str(reaction.emoji.name)]
-                role = await member.guild.fetch_role(role_id)
-                return role
+                await member.guild.fetch_roles()
+                return member.guild.get_role(role_id)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, reaction: nc.RawReactionActionEvent):
