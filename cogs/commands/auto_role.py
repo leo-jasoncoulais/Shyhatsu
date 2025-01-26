@@ -1,8 +1,8 @@
 import nextcord as nc
 from nextcord.ext import commands
-from utils import DefaultRoleConfig
+from utils import AutoRoleConfig
 
-config = DefaultRoleConfig()
+config = AutoRoleConfig()
 
 class DefaultRoleCommand(commands.Cog):
 
