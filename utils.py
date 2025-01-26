@@ -64,3 +64,21 @@ class TicketConfig:
         with open(self.config.file, "w") as file:
             config[self.name][key] = value
             dump(config, file, indent=4)
+
+class ReactionConfig:
+
+    def __init__(self):
+        
+        self.config = Config()
+        self.name = "REACTION_ROLE"
+
+    def get_message_reactions(self, message_id: str):
+        config = self.config.get_value(self.name)
+        if message_id in config:
+            return config[message_id]
+        
+    def set_message_reactions(self, message_id: str, reactions: dict):
+        config = self.config.get_config()
+        with open(self.config.file, "w") as file:
+            config[self.name][message_id] = reactions
+            dump(config, file, indent=4)
