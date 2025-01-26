@@ -16,6 +16,7 @@ class ReactionRoleEvent(commands.Cog):
         if message_reactions:
             if str(reaction.emoji.name) in message_reactions:
                 role_id = message_reactions[str(reaction.emoji.name)]
+                print(member)
                 return await member.guild.fetch_role(role_id)
 
     @commands.Cog.listener()
