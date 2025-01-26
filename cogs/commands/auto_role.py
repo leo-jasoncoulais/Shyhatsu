@@ -19,13 +19,13 @@ class DefaultRoleCommand(commands.Cog):
 
         else:
             
-            if role.id not in config.get_default_role():
-                config.add_default_role(role.id)
+            if role.id not in config.get_auto_role():
+                config.add_auto_role(role.id)
 
             await interaction.send(f"Le role sera attribué à l'arrivée des membres ! <:yay:1274376322847739935>", ephemeral=True)
 
     @nc.slash_command(description="Retirer un rôle qui ne sera plus ajouté à tous les membres à leur arrivée.")
-    async def ajouter_role(self, interaction: nc.Interaction,
+    async def retirer_role(self, interaction: nc.Interaction,
             role: nc.Role = nc.SlashOption(description="Le rôle à ne plus donner à l'arrivée.", required=True),
         ):
         
@@ -34,8 +34,8 @@ class DefaultRoleCommand(commands.Cog):
 
         else:
             
-            if role.id in config.get_default_role():
-                config.remove_default_role(role.id)
+            if role.id in config.get_auto_role():
+                config.remove_auto_role(role.id)
 
             await interaction.send(f"Le role ne sera plus attribué à l'arrivée des membres ! <:yay:1274376322847739935>", ephemeral=True)
 

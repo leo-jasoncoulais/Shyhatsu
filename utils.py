@@ -90,7 +90,7 @@ class AutoRoleConfig:
         self.config = Config()
         self.name = "AUTO_ROLE"
 
-    def get_default_role(self):
+    def get_auto_role(self):
         return self.config.get_value(self.name)
     
     def add_auto_role(self, role_id: int):

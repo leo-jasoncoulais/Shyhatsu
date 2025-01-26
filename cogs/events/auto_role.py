@@ -12,7 +12,7 @@ class AutoRoleEvent(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member: nc.Member):
 
-        for role_id in config.get_default_role():
+        for role_id in config.get_auto_role():
             role = await member.guild.fetch_role(role_id)
             await member.add_roles(role)
 
