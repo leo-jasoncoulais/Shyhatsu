@@ -1,8 +1,8 @@
 import nextcord as nc
 from nextcord.ext import commands
-from utils import Config
+from utils import TicketConfig
 
-config = Config()
+config = TicketConfig()
 
 class SetupCommand(commands.Cog):
 
@@ -19,8 +19,8 @@ class SetupCommand(commands.Cog):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:
-            config.get_value("MEMBER_ROLE_ID", membre.id)
-            config.get_value("STAFF_ROLE_ID", staff.id)
+            config.set_member_role(membre.id)
+            config.set_staff_role(staff.id)
 
             await interaction.send(f"Les rôles sont configurés ! <:yay:1274376322847739935>", ephemeral=True)
 
