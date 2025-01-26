@@ -1,9 +1,11 @@
 {
-    "MEMBER_ROLE_ID": false,
-    "STAFF_ROLE_ID": false,
-    "GENERAL_CHANNEL_ID": false,
-    "TICKET_ADMISSION_CHANNEL_ID": false,
-    "TICKET_HELP_CHANNEL_ID": false,
-    "TICKET_ADMISSION_CATEGORY_ID": false,
-    "TICKET_HELP_CATEGORY_ID": false
+    "TICKETS": {
+        "HELP_CHANNEL_ID": false,
+        "ADMISSION_CHANNEL_ID": false,
+        "HELP_CATEGORY_ID": false,
+        "ADMISSION_CATEGORY_ID": false,
+        "GENERAL_CHANNEL_ID": false,
+        "STAFF_ROLE_ID": false,
+        "MEMBER_ROLE_ID": false
+    }
 }

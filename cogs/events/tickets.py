@@ -1,8 +1,8 @@
 import nextcord as nc
 from nextcord.ext import commands
-from utils import Config
+from utils import TicketConfig
 
-config = Config()
+config = TicketConfig()
 
 class ManageTicketEvent(commands.Cog):
 
@@ -16,14 +16,14 @@ class ManageTicketEvent(commands.Cog):
 
             if interaction.data["custom_id"] == "create_ticket_admission":
 
-                category: nc.CategoryChannel = await interaction.guild.fetch_channel(config.get_value("TICKET_ADMISSION_CATEGORY_ID"))
+                category: nc.CategoryChannel = await interaction.guild.fetch_channel(config.get_admission_category())
 
                 id = sum([int(i) for i in str(interaction.user.id)])
 
                 channel = await category.create_text_channel(name=f"ticket-{id}", topic=str(interaction.user.id), overwrites={
 
                     interaction.guild.default_role: nc.PermissionOverwrite(read_messages=False),
-                    interaction.guild.get_role(config.get_value("STAFF_ROLE_ID")): nc.PermissionOverwrite(read_messages=True),
+                    interaction.guild.get_role(config.get_staff_role()): nc.PermissionOverwrite(read_messages=True),
                     interaction.user: nc.PermissionOverwrite(read_messages=True)
                 })
 
@@ -41,19 +41,19 @@ class ManageTicketEvent(commands.Cog):
                 await interaction.send("Le ticket a été créé ! <:yay:1274376322847739935>", ephemeral=True)
 
                 await channel.send(embed=embed)
-                msg = await channel.send(f"<@{interaction.user.id}><@&{config.get_value('STAFF_ROLE_ID')}>")
+                msg = await channel.send(f"<@{interaction.user.id}><@&{config.get_staff_role()}>")
                 await msg.delete()
 
             elif interaction.data["custom_id"] == "create_ticket_help":
 
-                category: nc.CategoryChannel = await interaction.guild.fetch_channel(config.get_value("TICKET_HELP_CATEGORY_ID"))
+                category: nc.CategoryChannel = await interaction.guild.fetch_channel(config.get_help_category())
 
                 id = sum([int(i) for i in str(interaction.user.id)])
 
                 channel = await category.create_text_channel(name=f"ticket-{id}", overwrites={
 
                     interaction.guild.default_role: nc.PermissionOverwrite(read_messages=False),
-                    interaction.guild.get_role(config.get_value("STAFF_ROLE_ID")): nc.PermissionOverwrite(read_messages=True),
+                    interaction.guild.get_role(config.get_staff_role()): nc.PermissionOverwrite(read_messages=True),
                     interaction.user: nc.PermissionOverwrite(read_messages=True)
                 })
 
@@ -69,7 +69,7 @@ class ManageTicketEvent(commands.Cog):
                 await interaction.send("Le ticket a été créé ! <:yay:1274376322847739935>", ephemeral=True)
 
                 await channel.send(embed=embed)
-                msg = await channel.send(f"<@{interaction.user.id}><@&{config.get_value('STAFF_ROLE_ID')}>")
+                msg = await channel.send(f"<@{interaction.user.id}><@&{config.get_staff_role()}>")
                 await msg.delete()
 
 
