@@ -8,6 +8,5 @@
         "STAFF_ROLE_ID": false,
         "MEMBER_ROLE_ID": false
     },
-    "REACTION_ROLE": {},
-    "AUTO_ROLE": []
+    "REACTION_ROLE": {}
 }

@@ -82,25 +82,3 @@ class ReactionConfig:
         with open(self.config.file, "w") as file:
             config[self.name][message_id] = reactions
             dump(config, file, indent=4)
-
-class AutoRoleConfig:
-
-    def __init__(self):
-        
-        self.config = Config()
-        self.name = "AUTO_ROLE"
-
-    def get_default_role(self):
-        return self.config.get_value(self.name)
-    
-    def add_auto_role(self, role_id: int):
-        config = self.config.get_config()
-        with open(self.config.file, "w") as file:
-            config[self.name].append(role_id)
-            dump(config, file, indent=4)
-
-    def remove_auto_role(self, role_id: int):
-        config = self.config.get_config()
-        with open(self.config.file, "w") as file:
-            config[self.name].remove(role_id)
-            dump(config, file, indent=4)
