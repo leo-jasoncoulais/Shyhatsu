@@ -248,8 +248,8 @@ class ManageTicketCommand(commands.Cog):
                 view.add_item(Button(style=nc.ButtonStyle.primary, label="Créer un ticket", custom_id="create_ticket_help"))
                 
                 embed = nc.Embed(
-                    title="Ticket d'entrée <:petitefrog:1216663533928845322>",
-                    description="Pour rentrer sur le serveur, merci d'ouvrir un ticket et répondre aux questions ! <:yay:1274376322847739935>",
+                    title="Ticket d'aide <:petitefrog:1216663533928845322>",
+                    description="Pour toute demande auprès du staff ! <:yay:1274376322847739935>\n(signalement d'un bug, problème, réclamation, plainte...)",
                     color=nc.Color.green()
                 )
 
