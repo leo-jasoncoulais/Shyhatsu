@@ -10,7 +10,7 @@ class EclipseCommand(commands.Cog):
     @nc.slash_command(description="Permet d'eclipser un utilisateur")
     async def eclipse(self, interaction: nc.Interaction, member: nc.Member = nc.SlashOption(description="Membre à éclipser", required=True)):
         
-        if not (interaction.user.top_role.permissions.ban_members or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+        if not (interaction.user.guild_permissions.ban_members or interaction.user.guild_permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:

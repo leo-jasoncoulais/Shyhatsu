@@ -16,7 +16,7 @@ class ManageTicketCommand(commands.Cog):
 
         await interaction.guild.fetch_roles()
 
-        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+        if not (interaction.user.guild_permissions.manage_roles or interaction.user.guild_permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         elif not (interaction.channel.category.id == config.get_admission_category() and interaction.channel.topic):
@@ -53,7 +53,7 @@ class ManageTicketCommand(commands.Cog):
 
         await interaction.guild.fetch_roles()
 
-        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+        if not (interaction.user.guild_permissions.manage_roles or interaction.user.guild_permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         elif not (interaction.channel.category.id == config.get_admission_category() and interaction.channel.topic):
@@ -89,7 +89,7 @@ class ManageTicketCommand(commands.Cog):
 
         await interaction.guild.fetch_roles()
 
-        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+        if not (interaction.user.guild_permissions.manage_roles or interaction.user.guild_permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         elif not (interaction.channel.category.id == config.get_help_category() and not interaction.channel.topic):
@@ -144,7 +144,7 @@ class ManageTicketCommand(commands.Cog):
 
         await interaction.guild.fetch_roles()
 
-        if not (interaction.user.top_role.permissions.manage_channels or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+        if not (interaction.user.guild_permissions.manage_channels or interaction.user.guild_permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:
@@ -222,7 +222,7 @@ class ManageTicketCommand(commands.Cog):
 
         await interaction.guild.fetch_roles()
 
-        if not (interaction.user.top_role.permissions.manage_channels or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+        if not (interaction.user.guild_permissions.manage_channels or interaction.user.guild_permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:
