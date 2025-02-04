@@ -14,7 +14,7 @@ class DefaultRoleCommand(commands.Cog):
             role: nc.Role = nc.SlashOption(description="Le rôle à donner à l'arrivée.", required=True),
         ):
         
-        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+        if not (interaction.user.guild_permissions.manage_roles or interaction.user.guild_permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:
@@ -29,7 +29,7 @@ class DefaultRoleCommand(commands.Cog):
             role: nc.Role = nc.SlashOption(description="Le rôle à ne plus donner à l'arrivée.", required=True),
         ):
         
-        if not (interaction.user.top_role.permissions.manage_roles or interaction.user.top_role.permissions.administrator or interaction.user.id == interaction.guild.owner_id):
+        if not (interaction.user.guild_permissions.manage_roles or interaction.user.guild_permissions.administrator or interaction.user.id == interaction.guild.owner_id):
             await interaction.send("Eh oh, tu tentes de faire quoi ? Pas touche à cette commande ! <:attaque:1216663550282694717>")
 
         else:
